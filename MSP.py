@@ -163,7 +163,7 @@ def excel_verilerini_oku(excel_bytes):
 
     try:
         sayfa = kitap["Sayfa1"]
-        sabit_tarih = sayfa["K1"].value
+        sabit_tarih = sayfa["L1"].value
 
     finally:
         kitap.close()
