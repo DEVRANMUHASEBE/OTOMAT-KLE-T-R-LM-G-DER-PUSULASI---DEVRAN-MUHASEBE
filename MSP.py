@@ -11,7 +11,7 @@ import streamlit as st
 
 # -------------------------------------------------------
 # OTOMATİK VE MANUEL GİDER PUSULASI
-# Devran Muhasebe
+# Devran Mâli Müşavirlik
 # -------------------------------------------------------
 
 
@@ -409,7 +409,7 @@ st.set_page_config(
 # ===========================================================
 
 st.title("📄 Otomatik Gider Pusulası")
-st.subheader("Devran Muhasebe")
+st.subheader("Devran Mâli Müşavirlik")
 
 st.write(
     "Toplu Excel dosyası yükleyebilir veya gider pusulasını "
@@ -516,6 +516,7 @@ with manuel_sekmesi:
     sutun1, sutun2 = st.columns(2)
 
     with sutun1:
+
         manuel_tc = st.text_input(
             "T.C. kimlik numarası",
             max_chars=11,
@@ -524,15 +525,19 @@ with manuel_sekmesi:
         )
 
     with sutun2:
+
         manuel_isim = st.text_input(
             "İsim soyisim",
             placeholder="Ad Soyad",
             key="manuel_isim",
         )
 
+    st.markdown("#### Tutar bilgileri")
+
     sutun3, sutun4, sutun5 = st.columns(3)
 
     with sutun3:
+
         manuel_miktar = st.number_input(
             "Miktar",
             min_value=0.0,
@@ -540,9 +545,11 @@ with manuel_sekmesi:
             step=0.01,
             format="%.2f",
             key="manuel_miktar",
+            on_change=miktar_degisince_hesapla,
         )
 
     with sutun4:
+
         manuel_birim_fiyat = st.number_input(
             "Birim fiyat",
             min_value=0.0,
@@ -550,38 +557,45 @@ with manuel_sekmesi:
             step=0.01,
             format="%.2f",
             key="manuel_birim_fiyat",
+            on_change=toplam_hesapla,
+            help=(
+                "Miktar ile birlikte yazıldığında toplam tutar "
+                "otomatik hesaplanır."
+            ),
         )
 
     with sutun5:
-        hesaplanan_toplam = (
-            manuel_miktar * manuel_birim_fiyat
-        )
 
         manuel_toplam = st.number_input(
             "Toplam tutar",
             min_value=0.0,
-            value=float(hesaplanan_toplam),
+            value=0.0,
             step=0.01,
             format="%.2f",
             key="manuel_toplam",
+            on_change=birim_fiyat_hesapla,
+            help=(
+                "Miktar ile birlikte yazıldığında birim fiyat "
+                "otomatik hesaplanır."
+            ),
         )
 
-    manuel_odeme = st.selectbox(
+    manuel_odeme = st.text_input(
         "Ödeme şekli",
-        options=[
-            "Nakit",
-            "Banka",
-            "Havale",
-            "EFT",
-            "Diğer",
-        ],
+        placeholder="Örneğin: Nakit, banka, havale, mahsup...",
         key="manuel_odeme",
+    )
+
+    st.caption(
+        "Miktar ve birim fiyatı yazarsanız toplam tutar; "
+        "miktar ve toplam tutarı yazarsanız birim fiyat otomatik hesaplanır."
     )
 
     manuel_olustur = st.button(
         "📄 Manuel PDF Oluştur",
         type="primary",
         use_container_width=True,
+        key="manuel_pdf_olustur",
     )
 
     if manuel_olustur:
@@ -589,10 +603,14 @@ with manuel_sekmesi:
         hatalar = []
 
         if not manuel_urun.strip():
-            hatalar.append("Satılan cinsi boş bırakılamaz.")
+            hatalar.append(
+                "Satılan cinsi boş bırakılamaz."
+            )
 
         if not manuel_isim.strip():
-            hatalar.append("İsim soyisim boş bırakılamaz.")
+            hatalar.append(
+                "İsim soyisim boş bırakılamaz."
+            )
 
         temiz_tc = manuel_tc.strip()
 
@@ -619,6 +637,11 @@ with manuel_sekmesi:
                 "Toplam tutar sıfırdan büyük olmalıdır."
             )
 
+        if not manuel_odeme.strip():
+            hatalar.append(
+                "Ödeme şekli boş bırakılamaz."
+            )
+
         if hatalar:
 
             for hata in hatalar:
@@ -627,6 +650,7 @@ with manuel_sekmesi:
         else:
 
             try:
+
                 manuel_pdf = manuel_pdf_olustur(
                     tarih=manuel_tarih,
                     isim=manuel_isim,
@@ -653,6 +677,7 @@ with manuel_sekmesi:
                 )
 
             except Exception as hata:
+
                 st.error(
                     f"PDF oluşturulamadı: {hata}"
                 )
