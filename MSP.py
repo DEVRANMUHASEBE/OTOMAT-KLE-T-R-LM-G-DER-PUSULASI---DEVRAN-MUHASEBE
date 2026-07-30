@@ -220,13 +220,13 @@ def yaz(sayfa, x, y, deger, boyut=FONT_SIZE):
         return
 
     sayfa.insert_text(
-        pymupdf.Point(x, y),
-        yazilacak_metin,
-        fontsize=boyut,
-        fontname=FONT_ADI,
-        fontfile=FONT_DOSYASI,
-        color=(0, 0, 0),
-        overlay=True,
+    pymupdf.Point(x, y),
+    metin(deger),
+    fontsize=boyut,
+    fontname="dejavu",
+    fontfile="fonts/DejaVuSans.ttf",
+    color=(0, 0, 0),
+    overlay=True,
     )
 
 
