@@ -52,15 +52,27 @@ def giris_yap():
 
 if not st.session_state.giris_yapildi:
 
+    LOGO_DOSYASI = Path(__file__).resolve().parent / "logo.png"
+
+    col_logo1, col_logo2, col_logo3 = st.columns([1.3, 2, 1.3])
+
+    with col_logo2:
+        if LOGO_DOSYASI.is_file():
+            st.image(
+                str(LOGO_DOSYASI),
+                use_container_width=True
+            )
+
     st.markdown(
-    """
-    <div style="text-align:center; margin-top:80px; margin-bottom:30px;">
-        <h1>🔐 Devran Mâli Müşavirlik</h1>
-        <p style="font-size:18px; color:#888;">Gider Pusulası Sistemine Giriş</p>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+        """
+        <div style="text-align:center; margin-top:-15px; margin-bottom:25px;">
+            <p style="font-size:18px; font-weight:600;">
+                🔐 Gider Pusulası Sistemine Giriş
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
     col1, col2, col3 = st.columns([1, 2, 1])
 
@@ -89,8 +101,6 @@ if not st.session_state.giris_yapildi:
         if st.session_state.giris_hatasi:
             st.error("❌ Kullanıcı adı veya şifre hatalı.")
 
-    # KRİTİK:
-    # Giriş yapılmadan aşağıdaki MSP.py kodları çalışmaz.
     st.stop()
     
 # -------------------------------------------------------
