@@ -102,7 +102,28 @@ if not st.session_state.giris_yapildi:
             st.error("❌ Kullanıcı adı veya şifre hatalı.")
 
     st.stop()
-    
+    st.stop()
+
+
+# ==================================================
+# 📥 GİRİŞ BAŞARILI — BOŞ EXCEL ŞABLONU
+# ==================================================
+
+EXCEL_SABLON_LINKI = (
+    "https://docs.google.com/spreadsheets/d/"
+    "1L8lnHz-2tyT0zpoyPsPIEiPFv8A7FNC9/export?format=xlsx"
+)
+
+st.link_button(
+    "📥 Boş Excel Şablonunu İndir",
+    EXCEL_SABLON_LINKI
+)
+
+
+# --------------------------------------------------
+# OTOMATİK VE MANUEL GİDER PUSULASI
+# Devran Muhasebe
+# --------------------------------------------------    
 # -------------------------------------------------------
 # OTOMATİK VE MANUEL GİDER PUSULASI
 # Devran Muhasebe
