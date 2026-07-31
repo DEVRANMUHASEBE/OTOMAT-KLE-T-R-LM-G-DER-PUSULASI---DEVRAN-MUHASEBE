@@ -55,7 +55,7 @@ if not st.session_state.giris_yapildi:
     st.markdown(
     """
     <div style="text-align:center; margin-top:80px; margin-bottom:30px;">
-        <h1>🔐 Devran Muhasebe</h1>
+        <h1>🔐 Devran Mâli Müşavirlik</h1>
         <p style="font-size:18px; color:#888;">Gider Pusulası Sistemine Giriş</p>
     </div>
     """,
