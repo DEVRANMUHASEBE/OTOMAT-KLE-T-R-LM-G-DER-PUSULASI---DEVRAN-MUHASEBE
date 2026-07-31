@@ -67,7 +67,7 @@ if not st.session_state.giris_yapildi:
         """
         <div style="text-align:center; margin-top:-15px; margin-bottom:25px;">
             <p style="font-size:18px; font-weight:600;">
-                🔐 Gider Pusulası Sistemine Giriş
+                🔐 Gider Pusulası Hazır Şablon Sistemine Giriş
             </p>
         </div>
         """,
