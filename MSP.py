@@ -8,7 +8,101 @@ import pandas as pd
 import pymupdf
 import streamlit as st
 
+# ==================================================
+# 🔐 KULLANICI GİRİŞ SİSTEMİ
+# ==================================================
 
+if "giris_yapildi" not in st.session_state:
+    st.session_state.giris_yapildi = False
+
+if "aktif_kullanici" not in st.session_state:
+    st.session_state.aktif_kullanici = ""
+
+if "giris_hatasi" not in st.session_state:
+    st.session_state.giris_hatasi = False
+
+
+def giris_yap():
+    kullanici_adi = st.session_state.get("login_kullanici", "").strip()
+    sifre = st.session_state.get("login_sifre", "")
+
+    try:
+        kullanicilar = st.secrets["kullanicilar"]
+
+        if (
+            kullanici_adi in kullanicilar
+            and kullanicilar[kullanici_adi] == sifre
+        ):
+            st.session_state.giris_yapildi = True
+            st.session_state.aktif_kullanici = kullanici_adi
+            st.session_state.giris_hatasi = False
+            st.rerun()
+
+        else:
+            st.session_state.giris_hatasi = True
+
+    except Exception:
+        st.error("⚠️ Kullanıcı ayarları okunamadı.")
+        st.stop()
+
+
+# ==================================================
+# 🔐 GİRİŞ EKRANI
+# ==================================================
+
+if not st.session_state.giris_yapildi:
+
+    st.markdown(
+        """
+        <div style="
+            text-align:center;
+            margin-top:80px;
+            margin-bottom:30px;
+        ">
+            <h1>🔐 Devran Muhasebe</h1>
+
+            <p style="
+                font-size:18px;
+                color:#888;
+            ">
+                Gider Pusulası Sistemine Giriş
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    col1, col2, col3 = st.columns([1, 2, 1])
+
+    with col2:
+
+        st.text_input(
+            "👤 Kullanıcı Adı",
+            key="login_kullanici",
+            placeholder="Kullanıcı adınızı giriniz"
+        )
+
+        st.text_input(
+            "🔑 Şifre",
+            type="password",
+            key="login_sifre",
+            placeholder="Şifrenizi giriniz"
+        )
+
+        if st.button(
+            "🔓 Giriş Yap",
+            use_container_width=True,
+            type="primary"
+        ):
+            giris_yap()
+
+        if st.session_state.giris_hatasi:
+            st.error("❌ Kullanıcı adı veya şifre hatalı.")
+
+    # KRİTİK:
+    # Giriş yapılmadan aşağıdaki MSP.py kodları çalışmaz.
+    st.stop()
+    
 # -------------------------------------------------------
 # OTOMATİK VE MANUEL GİDER PUSULASI
 # Devran Muhasebe
